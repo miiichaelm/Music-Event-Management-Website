@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="bg">
+        {% include "navbar.html" %}
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-primary my-5" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+        </div>
+
+
+        <div class="container mt-200">
+            <div class="row py-5">
+                <div class="col-lg-8 offset-2">
+                    <div class="position-relative">
+                        <form action="">
+                            <div class="input-group">
+                                <input type="text" class="form-control p-2 px-3"
+                                       placeholder="Type something to search an event"
+                                       aria-label="Recipient's username" aria-describedby="button-addon2" name="query">
+                                <button class="btn btn-warning text-white" id="button-addon2">Search Now
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="row mt-40 align-items-center">
+            <div class="col-lg-6">
+
+                <h1 class="fs-64 text-orange">About Us</h1>
+                <p class="lead text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque modi
+                    perspiciatis harum quos quia
+                    unde eius sit a expedita! Officia maiores iste et optio, nemo expedita voluptates obcaecati sequi
+                    eos!Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
+
+            </div>
+            <div class="col-lg-6 text-center mt-41">
+                <img src="static/imgs/pexels-photo-4069292.jpeg" alt=""
+                     class="img-fluid br-14">
+            </div>
+        </div>
+
+
+        <div class="row mt-40">
+            <div class="col-lg-12">
+                <h1 class="fs-64 text-orange text-center">Events Near You</h1>
+            </div>
+        </div>
+
+
+        <div class="categories">
+            <h4>Browse events by category</h4>
+            {% for category in categories %}
+                <a href="?category={{ category.id }}"
+                   class="btn border
+                    {% if category.id|string() == category_id|string() %}
+                   btn-primary
+                   {% else %}
+                   btn-light
+                   {% endif %}"
+                >
+
+                    {{ category.title }}
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="row mt-40">
+
+            {% for event in events %}
+                <div class="col-lg-4 p-4">
+                    <div class="card position-relative">
+
+                        <img src="{{ event.image_link }}" class="card-img-top" alt="...">
+
+                        <div class="card-body">
+                            <h6 class="fs-24 text-bold">{{ event.title }}</h6>
+                            <table class="table text-start">
+                                <tbody>
+                                <tr>
+                                    <th>Organizer</th>
+                                    <td class="text-capitalize">{{ event.user.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Venue</th>
+                                    <td>{{ event.location }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date</th>
+                                    <td>{{ event.date_time }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Category</th>
+                                    <td>{{ event.category.title }}</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                            <a href="/book/{{ event.id }}" class="btn btn-warning text-white w-100">View event
+                                details</a>
+
+
+                        </div>
+
+                        <div class="position-absolute right-0 top-2 bg-blue p-1 rounded-2">
+                            <span class="text-capitalize p-0">
+                                {{ event.status }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- <div class="row mt-40">
+            <div class="col-lg-4">
+                <div class="box">
+                    <h2>Lorem</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque incidunt nemo optio animi
+                        nostrum eveniet quas sapiente quae dicta, corporis voluptas dolor totam nam consequuntur. Ipsa,
+                        quam, incidunt. At, autem!</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-41">
+                <div class="box">
+                    <h2>Lorem</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus laboriosam porro ab ad hic itaque
+                        autem dolor esse numquam laborum, nam magni laudantium, sunt rerum sapiente beatae, nihil, ipsam
+                        delectus?</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-41">
+                <div class="box">
+                    <h2>Lorem</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum impedit, fuga eveniet ex iure
+                        provident quam tempora iusto necessitatibus aut quasi earum minima delectus recusandae nesciunt
+                        veritatis, maiores, ipsam animi.</p>
+                </div>
+            </div>
+        </div> -->
+
+
+        <div class="row mt-40">
+            <div class="col-lg-12">
+                <h1 class="fs-64 text-orange text-center">Recent Reviews</h1>
+            </div>
+        </div>
+
+        <div class="row my-5">
+
+            {% for comment in comments %}
+                <div class="col-lg-4">
+                    <div class="box-3">
+                        <img src="https://ui-avatars.com/api/?background=0D8ABC&amp;color=fff&amp;bold=true&amp;size=150&amp;name={{ comment.user.name }}"
+                             alt="" class="img-fluid avatar rounded-circle mt--80">
+                        <h5 class="mt-20">{{ comment.user.name }}</h5>
+                        <p>{{ comment.comment }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+{% endblock body %}

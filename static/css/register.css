@@ -1,0 +1,53 @@
+body {
+  height: 100%;
+  background: #eee;
+  font-size: 16px;
+}
+
+.Main__Section {
+  padding-top: 100px;
+  height: 100%;
+}
+
+.Login {
+  height: 100%;
+  /* margin-top: 100px;
+  margin-bottom: 100px; */
+}
+
+.Login a {
+  color: #444;
+  text-decoration: none;
+  line-height: inherit;
+}
+
+.Login .Brand {
+  text-align: center;
+  width: 240px;
+  margin: 10px auto 30px;
+  font-family: Roboto, Arial, sans-serif !important;
+}
+
+.Login .Brand>a {
+  padding: 0 8px;
+  /* border-radius: 10px; */
+  background-color: #d03238;
+  text-decoration: none;
+  /* color: #d03238 !important; */
+  color: #fff;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.Card {
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 15%);
+  background-color: #fefefe;
+  margin-bottom: 20px;
+}
+
+.Card>.Card__Content {
+  padding: 20px 20px 4px;
+  border-radius: 3px;
+}

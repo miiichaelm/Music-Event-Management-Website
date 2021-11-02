@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
+  <div class="container-fluid px-0" style="z-index:9;">
+    <div class="w-auto">
+      <a class="navbar-brand fst-italic d-flex align-items-center justify-content-center" href="/"> MusicEvents </a>
+    </div>
+    <button
+      class="navbar-toggler me-2 shadow-none"
+      type="button"
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarNav" aria-controls="navbarNav" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse w-auto ms-auto bg-white" id="navbarNav">
+        <ul class="navbar-nav h-100 d-flex align-content-center w-auto">
+          <li class="nav-item ">
+              <a class="nav-link h-100 d-flex align-items-center {% if request.path == "/" %}active{% endif %}" href="/">Home</a>
+          </li>
+
+          {% if session.get("logged_in") %}
+          
+          <li class="nav-item ">
+              <a class="nav-link h-100 d-flex align-items-center {% if request.path == "/my-events" %}active{% endif %}" href="/my-events">My Events</a>
+          </li>
+
+          <li class="nav-item ">
+              <a class="nav-link h-100 d-flex align-items-center {% if request.path == "/my-bookings" %}active{% endif %}" href="/my-bookings">My Booking</a>
+          </li>
+
+          <li class="nav-item ">
+              <a class="nav-link h-100 d-flex align-items-center" href="/logout/">Logout</a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+              <a class="nav-link h-100 d-flex align-items-center" href="/login/">Login/Register</a>
+          </li>
+
+          {% endif %}
+        </ul>
+    </div>
+  </div>
+</nav>

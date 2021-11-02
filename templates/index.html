@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block more_style %}
+
+<style>
+  .Message {
+    position: absolute;
+    top: 60px;
+    right: 5px;
+    z-index: 2;
+  }
+
+  .Page__Head {
+    overflow: hidden;
+    padding: 25px 0;
+    background: #2c363f;
+    color: #fff;
+    z-index: 1;
+    position: relative;
+    text-shadow: 0 0 2px rgb(0 0 0 / 80%);
+  }
+
+  .Page__Head:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to bottom right, #004771, #581205);
+    opacity: .8;
+    z-index: -1;
+    box-shadow: inset 0 10em 10em rgb(0 0 0 / 70%);
+  }
+
+  .AboutInfo {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+
+  .Categories .Category {
+    display: inline-block;
+    margin: 4px;
+    border: 1px solid #ddd;
+    background: whitesmoke;
+    line-height: 20px;
+  }
+
+  .Categories .Category a {
+    display: inline-block;
+    color: #555;
+    line-height: 20px;
+    text-decoration: none;
+    padding: 8px 13px;
+    font-size: 14px;
+  }
+
+  .Categories .Category a:hover {
+    text-decoration: underline;
+  }
+
+  .Categories .Category.active a {
+    color: #d03238;
+  }
+</style>
+<style>
+  .Testimonial {
+    background: #eee;
+  }
+
+  .Testimonial__Bottom {
+    margin-top: 20px;
+    margin-bottom: 0px;
+  }
+
+
+  .Testimonial h2 {
+    font-size: 28px;
+    font-weight: 700
+  }
+
+
+  .Testimonial__Inner .Comment {
+    /* border-radius: 2px; */
+    /* padding: 40px; */
+  }
+
+
+  .Testimonial__Inner img.Author__Image {
+    width: 60px;
+    height: 60px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    max-width: none
+  }
+
+  .Comment__Author {
+    font-family: "Montserrat", Sans-serif;
+    font-size: 14px;
+
+  }
+
+  .Comment__Pos {
+    font-family: "Montserrat", Sans-serif;
+    font-size: 12px;
+    color: #999;
+  }
+</style>
+{% endblock more_style %}
+
+{% block body %}
+
+{% include "navbar.html" %}
+
+<div class="Message " id="AlertMessage">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="alert alert-primary" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+</div>
+
+<div class="Page__Head"
+  style="background: url({{ url_for('static',filename="imgs/header-banner.jpeg") }}); background-size: cover; background-position: 50% 50%;">
+  <div class="container">
+    <div class="Header ">
+      <h1 class="text-center text-white text-uppercase">
+        Discover Best Music Events
+      </h1>
+    </div>
+  </div>
+  <div class="container">
+    <div class="AboutInfo text-center">
+      <p>
+        Hello! Welcome to Music Events where you can see, book and create your custom music events. Music events provide amazing opportunties to have fun and meet new people. 
+      </p>
+    </div>
+  </div>
+</div>
+
+<section class="container-lg mt-3">
+  <div class=" mb-3 ">
+    <!-- <h4>Browse events by category</h4> -->
+    <div class="Categories d-flex flex-wrap">
+      <div class="Category">
+        <a href="/">
+          All
+        </a>
+      </div>
+      {% for category in categories %}
+      <div class="Category {% if category.id|string() == category_id|string() %}active{% endif %}">
+        <a href="?category={{ category.id }}">
+          {{ category.title }}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row py-2">
+    <div class="col-12 col-sm-9 col-lg-7 mx-auto">
+      <form action="">
+        <div class="form-group d-flex">
+          <input type="text" class="Form__Input p-4 mx-1" placeholder="Search for an event" name="query" value="{% if query_str %}{{ query_str }}{% endif %}">
+          <button class="Button px-4 mx-1 shadow-none" type="submit">
+            Search
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+  <div class="Header">
+    <h3 class="text-center">Upcoming Events</h3>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+
+    {% for event in events %}
+    <div class="col">
+      <div class="Card Item" data-eid="{{ event.id }}">
+        <!-- <span class="EventStatus">{{ event.status }}</span> -->
+        <div class="Card__Image" alt="..."
+          style="background-size: cover; background-image: url({{ event.image_link }});"></div>
+        <div class="Card__Body">
+          <div class="Meta__Left">
+            <span class="UpMonth">{{ event.date_time.date().month|month_name }}</span>
+            <span class="UpDay">{{ event.date_time.date().day }}</span>
+          </div>
+          <div class="Meta__Right">
+            <h6 class="Card__Title">{{ event.title }}</h6>
+            <div class="Meta__Info">{{ event.location }}</div>
+            <div class="Meta__Info">
+              {{ event.date_time|str_date }}
+            </div>
+            <!-- <div class="Meta__Info">Thu Oct 28 2021 at 07:00 pm</div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="Testimonial mt-4">
+  <div class="container-lg py-4">
+    <div class="Header">
+      <h3 class="text-center">Recent Reviews</h3>
+    </div>
+    <div class="Testimonial__Bottom">
+      <div class="container-lg Testimonial__Inner">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+          {% for comment in comments %}
+          <div class="col mx-auto">
+            <div class="Comment bg-white px-3 py-4 rounded shadow-sm">
+              <div class="text-center">
+                “{{ comment.comment }}”
+              </div>
+              <div class="d-flex justify-content-center pt-2 pb-2">
+                <img class="Author__Image" src="https://images.pexels.com/photos/6625914/pexels-photo-6625914.jpeg"
+                  alt="">
+              </div>
+              <div class="Comment__Author d-flex justify-content-center">
+                {{ comment.user.name }}
+              </div>
+              <!-- <div class="Comment__Pos d-flex justify-content-center">Student</div> -->
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var eventCards = document.querySelectorAll(".Card.Item");
+    
+
+    
+    for (var i = 0; i < eventCards.length; i++) {
+      var eventItem = eventCards[i];
+      // console.log(eventItem.dataset.eid);
+      eventItem.addEventListener(
+        "click",
+        function (e) {
+          var eid = this.dataset.eid;
+          location.href = '/book/' + eid;
+        }
+      )
+    }
+
+    setTimeout(function () {
+      var alert = document.querySelector('#AlertMessage .alert');
+      if (alert) {
+        alert.remove();
+      }
+    }, 3000);
+  })
+</script>
+{% endblock body %}

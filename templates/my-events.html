@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block more_style %}
+<style type="text/css">
+
+</style>
+{% endblock more_style %}
+
+{% block body %}
+{% include "navbar.html" %}
+<section class="container-lg mt-3">
+
+  <div class="Header">
+    <h3 class="text-center">My Events</h3>
+  </div>
+
+  <div class="">
+    <a class="Button Button__Outline shadow-sm fw-normal" href="/create-event">Create Event</a>
+  </div>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-4">
+    {% for event in events %}
+    <div class="col">
+      <div class="Card Item" data-eid="{{ event.id }}">
+        <!-- <span class="EventStatus">{{ event.status }}</span> -->
+        <div class="Card__Image" alt="..."
+          style="background-size: cover; background-image: url({{ event.image_link }});"></div>
+        <div class="Card__Body">
+          <div class="Meta__Left">
+            <span class="UpMonth">{{ event.date_time.date().month|month_name }}</span>
+            <span class="UpDay">{{ event.date_time.date().day }}</span>
+          </div>
+          <div class="Meta__Right">
+            <h6 class="Card__Title">{{ event.title }}</h6>
+            <div class="Meta__Info">{{ event.location }}</div>
+            <div class="Meta__Info">
+              <span>{{ event.date_time|str_date }}</span>
+            </div>
+            <div class="text-end px-2 pt-2">
+              <a href="/update-event/{{ event.id }}" class="mx-1 text-primary">Edit</a>
+              <a href="/delete-event/{{ event.id }}" class="mx-1 text-danger">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+        
+
+{% endblock body %}

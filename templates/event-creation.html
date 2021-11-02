@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+
+{% include "navbar.html" %}
+
+<div class="container mt-3">
+
+  <div class="Header">
+    <h3 class="text-center">{% if event %}Update{% else %}Create{% endif %} Event</h3>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-10 col-lg-8  mx-auto">
+      {% if event and event.user_id == session.get("user_id") %}
+      <div class="text-end">
+        <a class="btn btn-danger" href="/delete-event/{{ event and event.id }}">Delete</a>
+      </div>
+      {% endif %}
+
+      <form action="" method="post">
+
+        {% if errors %}
+        {% for error in errors %}
+        <ul>
+          <li class="text-danger">{{ error }}</li>
+        </ul>
+        {% endfor %}
+
+        {% endif %}
+
+        <div>
+          <div class="form-group mb-4">
+            <label for="title" class="">Title <small>Required</small></label>
+            <input type="text" class="form-control" id="title" placeholder="What's your event called?" name="title"
+              value="{{ event and event.title }}" required>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="title" class="">Description <small>Required</small></label>
+
+            <textarea type="text" class="form-control" id="Description" placeholder="Describe event" name="description"
+              required>{{ event and event.description }}</textarea>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 form-group mb-4">
+              <label for="category">Category</label>
+              <select name="category" id="category" class=" form-select">
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if event and event.category_id == category.id %} selected
+                  {% endif %}>
+                  {{ category.title }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-4 form-group mb-4">
+              <label for="title" class="">Ticket Price <small>Required</small></label>
+              <input type="number" class="form-control" id="title" placeholder="Price" name="price"
+                value="{{ event and event.price }}" required>
+            </div>
+
+
+            <div class=" col-md-4 form-group mb-4">
+              <label for="status">Status</label>
+              <select name="status" id="status" class=" form-control form-select">
+
+                <option value="upcoming" {% if event and event.status == "upcoming" %} selected {% endif %}>
+                  Upcoming
+                </option>
+                <option value="booked" {% if event and event.status == "booked" %} selected {% endif %}>
+                  Booked
+                </option>
+                <option value="inactive" {% if event and event.status == "inactive" %} selected {% endif %}>
+                  Inactive
+                </option>
+                <option value="cancelled" {% if event and event.status == "cancelled" %} selected {% endif %}>
+                  Cancelled
+                </option>
+
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="banner">Banner <small>Required</small></label>
+            <input type="text" id="banner" class="form-control " name="banner" placeholder="Paste Banner Image Link"
+              value="{{ event and event.image_link }}" required>
+          </div>
+
+
+        </div>
+
+
+        <div>
+          <!-- <h5 class="">Location & Seats</h5> -->
+          <div class="row">
+            <div class="col-md-8 form-group mb-4">
+              <label for="location" class="">Location <small>Required</small></label>
+              <input type="text" class="form-control" id="location" placeholder="Location" name="location"
+                value="{{ event and event.location }}" required>
+            </div>
+
+            <div class="col-md-4 form-group mb-4">
+              <label for="tickets" class="">Total Tickets <small>Required</small></label>
+              <input type="number" class="form-control " id="location" placeholder="Total Seats" name="total_tickets"
+                value="{{ event and event.total_tickets }}" required>
+            </div>
+
+          </div>
+
+
+        </div>
+
+        <div>
+          <!-- <h5 class="">Date and Time</h5> -->
+
+          <div class="form-group mb-4">
+            <label for="date">Date & Time <small>Required</small></label>
+            <input type="datetime-local" class="form-control " id="date" placeholder="Date" name="datetime"
+              value="{{ event and event.date_time.date() }}T{{ event and event.date_time.time() }}" required>
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary px-5">{% if event %}Save{% else %}Create{% endif %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

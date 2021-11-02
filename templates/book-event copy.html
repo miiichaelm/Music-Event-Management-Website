@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    {% include "navbar.html" %}
+
+    <div class="container">
+
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-danger my-5" role="alert">
+                    <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="event-bg" style="background-image: url('{{ event.image_link }}')">
+                    <div class="row">
+                        <div class="col-lg-12 position-relative">
+                            <h1 class="text-uppercase text-orange fs-64">{{ event.title }}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-40">
+            <div class="col-lg-4">
+                <div class="box">
+                    <h2 class="text-center text-bold">Date & Time</h2>
+                    <ul class="list-unstyled list-inline fs-24 mt-20 text-center mb-0">
+                        <li class="list-inline-item text-bold">Date:</li>
+                        <li class="list-inline-item"> {{ event.date_time.date() }}</li>
+                        <li class="list-inline-item text-bold">Time:</li>
+                        <li class="list-inline-item">{{ event.date_time.time() }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-41">
+                <div class="box">
+                    <h2 class="text-center text-bold">Location</h2>
+                    <h5 class="fs-24 mt-20 text-center">{{ event.location }}</h5>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-41">
+                <div class="box">
+                    <h2 class="text-center text-bold">Price</h2>
+                    <h5 class="fs-24 mt-20 text-center">{{ event.price }} / Ticket </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-40">
+
+            <div class="col-lg-6">
+                <div class="box-1">
+                    <h1 class="text-center text-bold">Details</h1>
+                    <p class="text-center lead">
+                        {{ event.description }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="box-1">
+                    <h1 class="text-center text-bold">Available Tickets</h1>
+                    <h5 class="text-center">
+                        {{ available_tickets }}
+                    </h5>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row mt-40 mb-60">
+
+            {% if available_tickets < 1 %}
+                <h2 class="text-center">This event is booked out. No more tickets available.</h2>
+            {% elif already_booked %}
+                <h2 class="text-center">You've already booked this event, <a href="/my-bookings">click here</a> to see your bookings
+                </h2>
+            {% elif session.get("logged_in") %}
+
+                <form class="form-inline" method="post" target="">
+
+                    <div class="row">
+
+                        <div class="form-group col-md-4 offset-6">
+                            <input type="number" name="quantity" class="form-control p-2" id="quantity"
+                                   placeholder="Number of tickets you want?"
+                                   required>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-warning px-4 py-2">Book Now</button>
+                        </div>
+                    </div>
+
+                </form>
+
+
+            {% else %}
+                <div class="">
+                    <a href="/login/" class="btn btn-warning text-white w-100 p-16 fs-24">Sign in now to book this
+                        event</a>
+                </div>
+            {% endif %}
+
+
+        </div>
+
+        <hr>
+
+        <div class="mb-60">
+            <h2 class="display-6 my-4">Comments</h2>
+
+            {#new comment form#}
+            {% if session.get("logged_in") %}
+                <div class="my-4">
+                    <form action="/add-comment/{{ event.id }}" method="post">
+                        <div class="row">
+                            <div class="col-md-8">
+
+                                <textarea type="text" name="comment" placeholder="Say something about this event"
+                                       class="form-control" required></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-primary btn-block">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            {% endif %}
+
+            {#  list of comments#}
+            <div>
+
+                {% if comments|length < 1 %}
+                    <p>0 comments on this event.</p>
+                {% endif %}
+                <hr>
+                {% for comment in comments %}
+                    <div>
+                        <h4>{{ comment.user.name }}</h4>
+                        <p>{{ comment.comment }}</p>
+                        <p class="text-muted">{{ comment.created_on }}</p>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

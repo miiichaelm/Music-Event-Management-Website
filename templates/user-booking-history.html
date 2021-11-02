@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block more_style %}
+<style>
+  .Booking .card-text {
+    line-height: 20px;
+    max-height: 40px;
+    margin-bottom: 3px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+  }
+
+  .BookingImage {
+    height: 100%;
+    width: 100%;
+  }
+</style>
+{% endblock more_style %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<section class="container-lg mt-3">
+  <div class="Header">
+    <h3 class="text-center">My Booked Events</h3>
+    <p class="fw-light ">This is your most recent bookings</p>
+  </div>
+
+  <div class="container-lg">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for booking in bookings %}
+      {% if booking.event %}
+      <div class="col">
+        <div class=" card mb-3 Booking mx-auto" style="max-width: 540px;">
+          <div class="row g-0">
+            <div class="col-md-4 ">
+              <div class="BookingImage rounded-start"
+                style="background-size: cover; background-image: url({{ booking.event.image_link }});">
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ booking.event.title }}</h5>
+                <p class="card-text">{{ booking.event.description }}</p>
+                <p class="card-text text-end">
+                  <small class="text-muted">{{ booking.event.date_time|str_date }}</small>
+                </p>
+                <p class="card-text">
+                  ${{ booking.event.price }} x {{ booking.quantity }} ticket{% if booking.quantity > 1 %}s{% endif %}
+                </p>
+                <a href="/book/{{ booking.event.id }}" class="">View details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %} 
+
+{% block more_style %}
+<link rel="stylesheet" href={{ url_for('static',filename="css/register.css") }}>
+{% endblock more_style %}
+
+{% block body %}
+<div class="Main__Section">
+  <div class="Login container">
+    <div class="row">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 mx-auto">
+        <div class="Brand">
+          <a class="fst-italic" href="/"> MusicEvents </a>
+        </div>
+        <div class="Card">
+          <div class="Card__Content">
+            <form method="POST">
+              <div class="form-group">
+                <label for="email">
+                  Email
+                  <small>Required</small>
+                </label>
+                <input class="Form__Input" id="email" name="email" required="" type="text" value="" />
+              </div>
+              <div class="form-group">
+                <label for="password">
+                  Password
+                  <small>Required</small>
+                </label>
+                <input class="Form__Input" id="password" name="password" required="" type="password" value="" />
+              </div>
+              <div class="">
+                <button type="submit" class="Button Expanded">Log in</button>
+                <a href="/register" class="Button Button__Outline Expanded">Sign up</a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="text-center">
+          <a href="/register/forgot"> Forgot your password? </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

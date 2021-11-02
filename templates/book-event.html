@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block more_style %}
+
+<style>
+  body {
+    background-color: #e8ecf1;
+  }
+
+  .Image__Container {
+    margin-bottom: 20px;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .Image__Container>img {
+    width: 100%;
+    min-height: 300px;
+    height: auto;
+    max-height: 450px;
+    object-fit: cover;
+  }
+
+  .EventTitle {
+    font-size: 16px;
+    line-height: 26px;
+    text-transform: none;
+    font-weight: 600;
+    font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #2e363f;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+
+  .Detail {
+    opacity: 0.92;
+  }
+
+  .Detail>i {
+    padding-right: 5px;
+  }
+
+  .Label h6 {
+    color: #2e363f;
+    font-size: 16px;
+    line-height: 20px;
+  }
+</style>
+{% endblock more_style %}
+
+{% block body %}
+{% include "navbar.html" %}
+
+<div class="container-lg">
+  {% with messages = get_flashed_messages() %} {% if messages %}
+  <div class="alert alert-danger my-5" role="alert">
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %} {% endwith %}
+
+  <div class="row">
+    <div class="col-12 col-sm-8 px-3 py-3">
+      <div class="p-4 rounded-3 bg-white shadow-sm" style="line-height: 26px">
+        <div class="Image__Container">
+          <img src="{{ event.image_link }}" />
+        </div>
+        <div class="EventTitle">{{ event.title }}</div>
+        <div class="EventDescription mb-5">{{ event.description }}</div>
+        <div>
+          <h6>Hosted By</h6>
+          <div>{{ event.user.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-4 px-3 py-3">
+      <div class="p-4 rounded-3 bg-white shadow-sm">
+        <div class="mb-4">
+          <div class="Label">
+            <h6>Date & Time</h6>
+          </div>
+          <div class="Detail">
+            <i class="bi bi-clock-fill"></i>
+            <span>{{ event.date_time|str_date }}</span>
+          </div>
+          
+        </div>
+        <div class="mb-4">
+          <div class="Label">
+            <h6>Location</h6>
+          </div>
+          <div class="Detail">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span> {{ event.location }} </span>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="Label">
+            <h6>Price</h6>
+          </div>
+          <div class="Detail">
+            <i class="bi bi-currency-dollar"></i>
+            <span> {{ event.price }} / Ticket </span>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="Label">
+            <h6>Available Tickets</h6>
+          </div>
+          <div class="Detail">
+            <span> {{ available_tickets }} </span>
+          </div>
+        </div>
+
+        <div class="row">
+          {% if available_tickets < 1 %}
+          <p class="text-center mb-0">
+            This event is booked out. No more tickets available.
+          </p>
+          {% elif already_booked %}
+          <p class="text-center mb-0">
+            You've already booked this event, <a href="/my-bookings">click here</a> to
+            see your bookings.
+          </p>
+          {% elif session.get("logged_in") %}
+
+          <form class="w-100" method="post" target="">
+            <div class="form-group row justify-content-end g-1 mb-0">
+              <div class="col-6 col-sm-12 col-md-6">
+                <input type="number" name="quantity" class="w-100 mb-0" id="quantity"
+                  max="{% if available_tickets >= 1 %}{{ available_tickets }}{% else %}0{% endif %}" placeholder="0"
+                  value="1" required />
+              </div>
+              <div class="col-6 col-sm-12 col-md-6">
+                <button class="btn btn-warning mb-0 w-100">Book Now</button>
+              </div>
+            </div>
+          </form>
+
+          {% else %}
+          <div class="w-100 text-center">
+            <a href="/login/" class="btn btn-warning">Sign in to book this event</a>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+
+  <section class="Comments">
+    <div class="Header">
+      <h3 class="text-center">Comments</h3>
+    </div>
+    <div class="container-lg">
+      <div class="row">
+        <div class="col-12 col-sm-8 mx-auto">
+          {#new comment form#} {% if session.get("logged_in") %}
+          <form class="mb-3" action="/add-comment/{{ event.id }}" method="post">
+            <div class="mb-3">
+              <textarea type="text" name="comment" placeholder="Say something about this event" class="form-control"
+                required></textarea>
+            </div>
+            <div class="text-end">
+              <input type="submit" class="btn btn-primary btn-block px-5" />
+            </div>
+          </form>
+
+          {% endif %} {# list of comments#}
+          <div>
+            {% if comments|length < 1 %}
+            <p>0 comments on this event.</p>
+            {% endif %}
+            {% for comment in comments %}
+            <div class="border border-1 shadow-sm bg-white px-4 py-3 mb-3">
+              <div class="mb-2">
+                <span class="fs-6 fw-bold me-2">{{ comment.user.name }}</span>
+                <small class="text-muted">{{ comment.created_on }}</small>
+              </div>
+              <div class="">“{{ comment.comment }}”</div>
+
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}
